@@ -2,8 +2,10 @@
 #include <string>
 
 #include <mysql/mysql.h>
-#include "./Connector.h"
 #include <glog/logging.h>
+
+#include "./Connector.h"
+#include "../mysqlpool/MysqlPool.h"
 
 const static std::string ok_200_title = "OK";
 const static std::string error_400_title = "Bad Request";
@@ -15,8 +17,18 @@ const static std::string error_404_form  = "The requested file was not found on 
 const static std::string error_500_title = "Internal Error";
 const static std::string error_500_form  = "There was an unusual problem serving the request file.\n";
 
+// 但浏览器出现连接重置时，可能是网站根目录出错
+// 或http响应格式出错
+// 或者访问的文件中内容完全为空
 const static std::string doc_root = "/root/project/SimpleHttpServer/wwwroot";
 
+// 创建数据库连接池
+// TODO: 为什么这里要创建数据库连接池？
+MysqlConnectionPool* g_mysqlconnectionpool = MysqlConnectionPool::getInstance("localhost", "root", "Root@123", "simplehttpserver", 3306, 5);
+
+// 将表中的用户名和密码放入map
+// TODO: 为什么要这么做？
+std::map<std::string, std::string> g_map_users;
 
 
 void         Connector::init(int sockfd, const struct sockaddr_in& addr){
@@ -41,6 +53,9 @@ sockaddr_in* Connector::getAddress() const {
 }
 
 void         Connector::initMysqlResult() {
+    // 先从连接池中取出一个连接
+    MYSQL * mysql = g_mysqlconnectionpool->getConnection();
+
 
 }
 
