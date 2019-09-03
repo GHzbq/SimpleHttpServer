@@ -27,6 +27,7 @@
 
 
 class Connector {
+public:
     static const int FILENAME_LEN = 200;
     static const int READ_BUFFER_SIZE = 2048;
     static const int WRITE_BUFFER_SIZE = 1024;
@@ -68,32 +69,32 @@ public:
     Connector() {}
     ~Connector() {}
 public:
-    void init(int sockfd, const struct sockadd_in& addr);
-    void closeConnection(bool realclose = true);
-    void process(SortTimerList* timerlst, UtilTimer* timer, ClientData* usertimer);
-    bool readOnce();
-    bool write();
+    void         init(int sockfd, const struct sockaddr_in& addr);
+    void         closeConnection(bool realclose = true);
+    void         process(SortTimerList* timerlst, UtilTimer* timer, ClientData* usertimer);
+    bool         readOnce();
+    bool         write();
     sockaddr_in* getAddress() const ;
-    void initMysqlResult();
+    void         initMysqlResult();
 private:
-    void init();
-    HTTP_CODE processRead();
-    bool processWrite(HTTP_CODE ret);
-    HTTP_CODE processRequestLine(char* text);
-    HTTP_CODE parseHeader(char* text);
-    HTTP_CODE parseContent(char* text);
-    HTTP_CODE doRequest();
-    char* getLine();
-    LINE_STATUS parseLine();
-    void unmap();
-    bool addResponse(const char* format, ...);
-    bool addContent(const char* content);
-    bool addStatusLine(int status, const char* title);
-    bool addHeaders(int contentlength);
-    bool addContentType();
-    bool addContentLength(int contentlength);
-    bool addLinger();
-    bool addBlackLine();
+    void         init();
+    HTTP_CODE    processRead();
+    bool         processWrite(HTTP_CODE ret);
+    HTTP_CODE    processRequestLine(char* text);
+    HTTP_CODE    parseHeader(char* text);
+    HTTP_CODE    parseContent(char* text);
+    HTTP_CODE    doRequest();
+    char*        getLine();
+    LINE_STATUS  parseLine();
+    void         unmap();
+    bool         addResponse(const char* format, ...);
+    bool         addContent(const char* content);
+    bool         addStatusLine(int status, const char* title);
+    bool         addHeaders(int contentlength);
+    bool         addContentType();
+    bool         addContentLength(int contentlength);
+    bool         addLinger();
+    bool         addBlackLine();
 public:
     static int m_epollfd;
     static int m_user_count;
