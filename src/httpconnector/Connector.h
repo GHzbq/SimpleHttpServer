@@ -69,7 +69,7 @@ public:
     Connector() {}
     ~Connector() {}
 public:
-    void         init(int sockfd, const struct sockaddr_in& addr);
+    void         init();
     void         closeConnection(bool realclose = true);
     void         process(SortTimerList* timerlst, UtilTimer* timer, ClientData* usertimer);
     bool         readOnce();
@@ -77,19 +77,19 @@ public:
     sockaddr_in* getAddress() const ;
     void         initMysqlResult();
 private:
-    void         init();
+    void         init(int sockfd, const struct sockaddr_in& addr);
     HTTP_CODE    processRead();
     bool         processWrite(HTTP_CODE ret);
-    HTTP_CODE    processRequestLine(char* text);
+    HTTP_CODE    parseRequestLine(char* text);
     HTTP_CODE    parseHeader(char* text);
     HTTP_CODE    parseContent(char* text);
     HTTP_CODE    doRequest();
     char*        getLine();
     LINE_STATUS  parseLine();
     void         unmap();
-    bool         addResponse(const char* format, ...);
-    bool         addContent(const char* content);
-    bool         addStatusLine(int status, const char* title);
+    bool         addResponse(const std::string& format, ...);
+    bool         addContent(const std::string& content);
+    bool         addStatusLine(int status, const std::string& title);
     bool         addHeaders(int contentlength);
     bool         addContentType();
     bool         addContentLength(int contentlength);
